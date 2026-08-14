@@ -77,12 +77,19 @@ class CommentDetailAPIView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'comment_pk'
     
     def get_queryset(self):
+        post_id = self.kwargs['pk']
+
         if self.request.user.is_authenticated:
             return Comment.objects.filter(
-                Q(is_approved = True) | Q(author = self.request.user)
+                post_id=post_id
+            ).filter(
+                Q(is_approved=True) | Q(author=self.request.user)
             )
-        
-        return Comment.objects.filter(is_approved = True)
+
+        return Comment.objects.filter(
+            post_id=post_id,
+            is_approved=True
+        )
         
     
     
