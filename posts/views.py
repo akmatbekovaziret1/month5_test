@@ -54,7 +54,7 @@ class CommentListCreateAPIView(ListCreateAPIView):
     
     def get_queryset(self):
         post_id = self.kwargs['id']
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             # authenticated users can also see their drafts
             return Comment.objects.filter(
                 post_id = post_id

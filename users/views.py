@@ -19,7 +19,7 @@ class RegisterAPIView(CreateAPIView):
         
         user = User.objects.create_user(
             username = serializer.validated_data['username'],
-            password = serializer.validated_data['passowrd']
+            password = serializer.validated_data['password']
         )
         
         return Response(
