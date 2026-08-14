@@ -53,7 +53,7 @@ class CommentListCreateAPIView(ListCreateAPIView):
         return CommentSerializer
     
     def get_queryset(self):
-        post_id = self.kwargs['id']
+        post_id = self.kwargs['pk']
         if self.request.user.is_authenticated:
             # authenticated users can also see their drafts
             return Comment.objects.filter(
@@ -65,7 +65,7 @@ class CommentListCreateAPIView(ListCreateAPIView):
 
         
     def perform_create(self, serializer):
-        post_id = self.kwargs['id']
+        post_id = self.kwargs['pk']
         # to return proper answer instead of exception
         post = get_object_or_404(Post, id=post_id, is_published = True)
         serializer.save(author = self.request.user, post = post)
@@ -74,6 +74,7 @@ class CommentDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = CommentSerializer
+    lookup_url_kwarg = 'comment_pk'
     
     def get_queryset(self):
         if self.request.user.is_authenticated:
